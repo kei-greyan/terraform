@@ -1,0 +1,5 @@
+kind: BUG FIXES
+body: 'init: Stop removing locks for a provider from the dependency lock file if that provider is configured as a dev_override during init'
+time: 2026-05-22T18:08:48.823127+01:00
+custom:
+    Issue: "38634"
