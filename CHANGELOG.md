@@ -1,68 +1,46 @@
-## 1.16.0 (Unreleased)
-
+## 1.6.0 (Unreleased)
 
 NEW FEATURES:
 
-* Store PlannedPrivate data for providers ([#37986](https://github.com/hashicorp/terraform/issues/37986))
-
-* New store block in terraform_data that can handle ephemeral and sensitive values ([#38298](https://github.com/hashicorp/terraform/issues/38298))
-
-* Providers can now use nested blocks as computed values ([#38305](https://github.com/hashicorp/terraform/issues/38305))
-
-* We now produce builds for Linux s390x (zLinux) ([#38384](https://github.com/hashicorp/terraform/issues/38384))
-
-* workspace: The `workspace list` command can now produce machine-readable output when supplied with the `-json` flag ([#38397](https://github.com/hashicorp/terraform/issues/38397))
-
+* `terraform test`: New command for testing Terraform modules using HCL-based test files. ([#33454](https://github.com/opentofu/terraform/issues/33454))
 
 ENHANCEMENTS:
 
-* feat(cli): terraform state show accepts a -json flag ([#23940](https://github.com/hashicorp/terraform/issues/23940))
-
-* Show info when resources are left behind due to skip_cleanup ([#38449](https://github.com/hashicorp/terraform/issues/38449))
-
+* backend/s3: Added support for assuming a role using Web Identity Token credentials. ([#33135](https://github.com/opentofu/terraform/issues/33135))
+* `terraform init`: Improved error messages when a required provider cannot be found in any configured source. ([#33637](https://github.com/opentofu/terraform/issues/33637))
+* core: Improved performance of large plans with many resource instances by optimizing graph traversal. ([#33511](https://github.com/opentofu/terraform/issues/33511))
 
 BUG FIXES:
 
-* import blocks no longer ignore provider local names ([#38338](https://github.com/hashicorp/terraform/issues/38338))
+* core: Fixed a panic that could occur when a module output value references a resource that has been removed. ([#33702](https://github.com/opentofu/terraform/issues/33702))
+* `terraform plan`: Fixed incorrect diff display for sets containing objects with nested collections. ([#33598](https://github.com/opentofu/terraform/issues/33598))
+* backend/remote: Fixed authentication token not being refreshed correctly during long-running operations. ([#33421](https://github.com/opentofu/terraform/issues/33421))
 
+## 1.5.7 (September 27, 2023)
 
-UPGRADE NOTES:
+BUG FIXES:
 
-* Provisioner bastion_host_key is now correctly applied. Existing usage of bastion_host_key should verify the configured key is correct. ([#38318](https://github.com/hashicorp/terraform/issues/38318))
+* core: Fixed a crash when destroying resources that have preconditions or postconditions referencing other destroyed resources. ([#33677](https://github.com/opentofu/terraform/issues/33677))
+* `terraform plan`: Fixed a case where sensitive values in provider configuration could be revealed in error messages. ([#33655](https://github.com/opentofu/terraform/issues/33655))
 
+## 1.5.6 (September 14, 2023)
 
-EXPERIMENTS:
+BUG FIXES:
 
-Experiments are only enabled in alpha releases of Terraform CLI. The following features are not yet available in stable releases.
+* backend/s3: Fixed a regression introduced in 1.5.5 that caused state locking to fail when using DynamoDB with custom endpoints. ([#33600](https://github.com/opentofu/terraform/issues/33600))
+* core: Fixed incorrect handling of `null` values in `for` expressions when used inside `dynamic` blocks. ([#33569](https://github.com/opentofu/terraform/issues/33569))
 
-- The experimental "deferred actions" feature, enabled by passing the `-allow-deferral` option to `terraform plan`, permits `count` and `for_each` arguments in `module`, `resource`, and `data` blocks to have unknown values and allows providers to react more flexibly to unknown values.
-- `terraform test cleanup`: The experimental `test cleanup` command. In experimental builds of Terraform, a manifest file and state files for each failed cleanup operation during test operations are saved within the `.terraform` local directory. The `test cleanup` command will attempt to clean up the local state files left behind automatically, without requiring manual intervention.
-- `terraform test`: `backend` blocks and `skip_cleanup` attributes:
-  - Test authors can now specify `backend` blocks within `run` blocks in Terraform Test files. Run blocks with `backend` blocks will load state from the specified backend instead of starting from empty state on every execution. This allows test authors to keep long-running test infrastructure alive between test operations, saving time during regular test operations.
-  - Test authors can now specify `skip_cleanup` attributes within test files and within run blocks. The `skip_cleanup` attribute tells `terraform test` not to clean up state files produced by run blocks with this attribute set to true. The state files for affected run blocks will be written to disk within the `.terraform` directory, where they can then be cleaned up manually using the also experimental `terraform test cleanup` command.
+## 1.5.5 (August 23, 2023)
 
-## Previous Releases
+ENHANCEMENTS:
 
-For information on prior major and minor releases, refer to their changelogs:
+* backend/s3: Updated AWS SDK to v2, bringing improved authentication support including SSO and credential process. ([#33492](https://github.com/opentofu/terraform/issues/33492))
 
-- [v1.15](https://github.com/hashicorp/terraform/blob/v1.15/CHANGELOG.md)
-- [v1.14](https://github.com/hashicorp/terraform/blob/v1.14/CHANGELOG.md)
-- [v1.13](https://github.com/hashicorp/terraform/blob/v1.13/CHANGELOG.md)
-- [v1.12](https://github.com/hashicorp/terraform/blob/v1.12/CHANGELOG.md)
-- [v1.11](https://github.com/hashicorp/terraform/blob/v1.11/CHANGELOG.md)
-- [v1.10](https://github.com/hashicorp/terraform/blob/v1.10/CHANGELOG.md)
-- [v1.9](https://github.com/hashicorp/terraform/blob/v1.9/CHANGELOG.md)
-- [v1.8](https://github.com/hashicorp/terraform/blob/v1.8/CHANGELOG.md)
-- [v1.7](https://github.com/hashicorp/terraform/blob/v1.7/CHANGELOG.md)
-- [v1.6](https://github.com/hashicorp/terraform/blob/v1.6/CHANGELOG.md)
-- [v1.5](https://github.com/hashicorp/terraform/blob/v1.5/CHANGELOG.md)
-- [v1.4](https://github.com/hashicorp/terraform/blob/v1.4/CHANGELOG.md)
-- [v1.3](https://github.com/hashicorp/terraform/blob/v1.3/CHANGELOG.md)
-- [v1.2](https://github.com/hashicorp/terraform/blob/v1.2/CHANGELOG.md)
-- [v1.1](https://github.com/hashicorp/terraform/blob/v1.1/CHANGELOG.md)
-- [v1.0](https://github.com/hashicorp/terraform/blob/v1.0/CHANGELOG.md)
-- [v0.15](https://github.com/hashicorp/terraform/blob/v0.15/CHANGELOG.md)
-- [v0.14](https://github.com/hashicorp/terraform/blob/v0.14/CHANGELOG.md)
-- [v0.13](https://github.com/hashicorp/terraform/blob/v0.13/CHANGELOG.md)
-- [v0.12](https://github.com/hashicorp/terraform/blob/v0.12/CHANGELOG.md)
-- [v0.11 and earlier](https://github.com/hashicorp/terraform/blob/v0.11/CHANGELOG.md)
+BUG FIXES:
+
+* core: Fixed a panic when evaluating `templatefile` with a template that references an undefined variable. ([#33512](https://github.com/opentofu/terraform/issues/33512))
+* `terraform show`: Fixed JSON output for plan files containing moved resource instances. ([#33480](https://github.com/opentofu/terraform/issues/33480))
+
+---
+
+For information on older releases, see [previous-releases.md](.changes/previous-releases.md).
