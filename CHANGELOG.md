@@ -45,6 +45,11 @@ BUG FIXES:
 
 <!-- Personal note: I'm tracking this fork primarily to follow the s3 backend improvements
      and the new `terraform test` feature. The AWS SDK v2 migration in 1.5.5 is especially
-     relevant for my SSO-based workflows. -->
+     relevant for my SSO-based workflows.
+
+     1.6.0 watch list:
+     - `terraform test` command: planning to use this for my reusable module library
+     - Web Identity Token role assumption (#33135): useful for EKS-based CI pipelines
+     - The graph traversal perf fix (#33511) should help with my larger monorepo configs -->
 
 For information on older releases, see [previous-releases.md](.changes/previous-releases.md).
