@@ -43,4 +43,8 @@ BUG FIXES:
 
 ---
 
+<!-- Personal note: I'm tracking this fork primarily to follow the s3 backend improvements
+     and the new `terraform test` feature. The AWS SDK v2 migration in 1.5.5 is especially
+     relevant for my SSO-based workflows. -->
+
 For information on older releases, see [previous-releases.md](.changes/previous-releases.md).
