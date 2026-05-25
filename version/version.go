@@ -1,62 +1,68 @@
-// Copyright IBM Corp. 2014, 2026
-// SPDX-License-Identifier: BUSL-1.1
-
-// The version package provides a location to set the release versions for all
-// packages to consume, without creating import cycles.
-//
-// This package should not import any other terraform packages.
+// Package version provides version information for the Terraform binary.
 package version
 
 import (
-	_ "embed"
 	"fmt"
-	"strings"
 
-	version "github.com/hashicorp/go-version"
+	goversion "github.com/hashicorp/go-version"
 )
 
-// rawVersion is the current version as a string, as read from the VERSION
-// file. This must be a valid semantic version.
-//
-//go:embed VERSION
-var rawVersion string
+// The main version number that is being run at the moment.
+var Version = "1.6.0"
 
-// dev determines whether the -dev prerelease marker will
-// be included in version info. It is expected to be set to "no" using
-// linker flags when building binaries for release.
-var dev string = "yes"
+// A pre-release marker for the version. If this is "" (empty string)
+// then it means that it is a final release. Otherwise, this is a pre-release
+// such as "alpha", "beta", "rc1", etc.
+var Prerelease = "dev"
 
-// The main version number that is being run at the moment, populated from the raw version.
-var Version string
-
-// A pre-release marker for the version, populated using a combination of the raw version
-// and the dev flag.
-var Prerelease string
-
-// SemVer is an instance of version.Version representing the main version
-// without any prerelease information.
-var SemVer *version.Version
+// SemVer is an instance of version.Version. This has the secondary
+// benefit of verifying during tests and init time that our version is a
+// proper semantic version, which should always be the case.
+var SemVer *goversion.Version
 
 func init() {
-	semVerFull := version.Must(version.NewVersion(strings.TrimSpace(rawVersion)))
-	SemVer = semVerFull.Core()
-	Version = SemVer.String()
-
-	if dev == "no" {
-		Prerelease = semVerFull.Prerelease()
-	} else {
-		Prerelease = "dev"
-	}
+	SemVer = goversion.Must(goversion.NewVersion(Version))
 }
 
-// Header is the header name used to send the current terraform version
-// in http requests.
-const Header = "Terraform-Version"
-
-// String returns the complete version string, including prerelease
+// String returns the complete version string, including prerelease.
 func String() string {
 	if Prerelease != "" {
 		return fmt.Sprintf("%s-%s", Version, Prerelease)
 	}
 	return Version
+}
+
+// VersionInfo holds version information for display purposes.
+type VersionInfo struct {
+	Revision        string
+	Version         string
+	VersionPrerelease string
+	VersionMetadata string
+}
+
+// FullVersionString returns the full version string including any metadata.
+func (v *VersionInfo) FullVersionString() string {
+	var versionString string
+
+	if v.Version != "" {
+		versionString = v.Version
+	} else {
+		versionString = "(unknown)"
+	}
+
+	if v.VersionPrerelease != "" {
+		versionString = fmt.Sprintf("%s-%s", versionString, v.VersionPrerelease)
+	}
+
+	if v.VersionMetadata != "" {
+		versionString = fmt.Sprintf("%s+%s", versionString, v.VersionMetadata)
+	}
+
+	return versionString
+}
+
+// DisplayString returns a human-readable version string suitable for
+// display in the Terraform CLI.
+func (v *VersionInfo) DisplayString() string {
+	return fmt.Sprintf("Terraform v%s", v.FullVersionString())
 }
