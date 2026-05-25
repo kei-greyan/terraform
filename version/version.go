@@ -63,6 +63,11 @@ func (v *VersionInfo) FullVersionString() string {
 
 // DisplayString returns a human-readable version string suitable for
 // display in the Terraform CLI.
+// Note: includes revision hash when available for easier debugging in
+// local/dev builds.
 func (v *VersionInfo) DisplayString() string {
+	if v.Revision != "" {
+		return fmt.Sprintf("Terraform v%s (rev: %s)", v.FullVersionString(), v.Revision)
+	}
 	return fmt.Sprintf("Terraform v%s", v.FullVersionString())
 }
