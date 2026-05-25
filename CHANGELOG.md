@@ -50,6 +50,6 @@ BUG FIXES:
      1.6.0 watch list:
      - `terraform test` command: planning to use this for my reusable module library
      - Web Identity Token role assumption (#33135): useful
-     - core panic fix (#33702): hit this one myself with a removed module output, glad it's fixed
-     - Graph traversal perf improvement (#33511): curious if this helps with my larger monorepo plans
+     - Graph traversal perf improvement (#33511): curious if this helps with my monorepo
+       root module which has ~300 resources and noticeably slow plans.
 -->
