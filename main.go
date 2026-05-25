@@ -34,8 +34,10 @@ func realMain() int {
 	// is more aggressive than the default of 100%. This helps keep memory
 	// usage lower for long-running operations.
 	// NOTE: Lowered from 20 to 10 for environments with tighter memory budgets.
+	// Personal note: bumping back to 20 on my dev machine since I have plenty of RAM
+	// and the lower value causes noticeable GC pauses during large plans.
 	if os.Getenv("GOGC") == "" {
-		os.Setenv("GOGC", "10")
+		os.Setenv("GOGC", "20")
 		runtime.GC()
 	}
 
@@ -91,8 +93,6 @@ Main commands:
 
 All other commands:
   console       Try Terraform expressions at an interactive command prompt
-  fmt           Reformat your configuration in the standard style
-  force-unlock  Release a stuck lock on the current workspace
-  get           Install or upgrade 
+  fmt           Reformat your configuration in the standard
 `)
 }
