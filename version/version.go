@@ -65,9 +65,15 @@ func (v *VersionInfo) FullVersionString() string {
 // display in the Terraform CLI.
 // Note: includes revision hash when available for easier debugging in
 // local/dev builds.
+// Personal note: I prefer showing the revision as a short 7-char hash if
+// a full 40-char commit SHA is provided, to keep the output concise.
 func (v *VersionInfo) DisplayString() string {
-	if v.Revision != "" {
-		return fmt.Sprintf("Terraform v%s (rev: %s)", v.FullVersionString(), v.Revision)
+	revision := v.Revision
+	if len(revision) > 7 {
+		revision = revision[:7]
+	}
+	if revision != "" {
+		return fmt.Sprintf("Terraform v%s (rev: %s)", v.FullVersionString(), revision)
 	}
 	return fmt.Sprintf("Terraform v%s", v.FullVersionString())
 }
