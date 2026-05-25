@@ -50,6 +50,5 @@ BUG FIXES:
      1.6.0 watch list:
      - `terraform test` command: planning to use this for my reusable module library
      - Web Identity Token role assumption (#33135): useful
-     - Graph traversal optimization (#33511): curious to benchmark this against my
-       larger infra repos which have 200+ resource instances and slow plan times
--->
+     - Graph traversal perf improvement (#33511): curious to benchmark this against
+       my larger monorepo configs which have been slow on plan
