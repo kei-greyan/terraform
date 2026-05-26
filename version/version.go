@@ -67,12 +67,15 @@ func (v *VersionInfo) FullVersionString() string {
 // local/dev builds.
 // Personal note: I prefer showing the revision as a short 7-char hash if
 // a full 40-char commit SHA is provided, to keep the output concise.
+// Also using "rev" label only in dev/prerelease builds to keep release
+// output clean.
 func (v *VersionInfo) DisplayString() string {
 	revision := v.Revision
 	if len(revision) > 7 {
 		revision = revision[:7]
 	}
-	if revision != "" {
+	// Only show revision info in prerelease/dev builds, not in final releases.
+	if revision != "" && v.VersionPrerelease != "" {
 		return fmt.Sprintf("Terraform v%s (rev: %s)", v.FullVersionString(), revision)
 	}
 	return fmt.Sprintf("Terraform v%s", v.FullVersionString())
